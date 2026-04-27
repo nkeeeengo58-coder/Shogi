@@ -1,0 +1,148 @@
+{
+  "beginner": [
+    {
+      "id": 1,
+      "description": "1手詰め - 基本",
+      "board": {
+        "board": [
+          [null, null, null, null, {"type": "king", "owner": "white"}, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, {"type": "rook", "owner": "black"}, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null]
+        ],
+        "captured_pieces": {
+          "black": [{"type": "gold", "owner": "black"}],
+          "white": []
+        },
+        "turn": "black"
+      },
+      "solution": []
+    },
+    {
+      "id": 2,
+      "description": "1手詰め - 頭金",
+      "board": {
+        "board": [
+          [null, null, null, null, {"type": "king", "owner": "white"}, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null]
+        ],
+        "captured_pieces": {
+          "black": [{"type": "gold", "owner": "black"}],
+          "white": []
+        },
+        "turn": "black"
+      },
+      "solution": []
+    }
+  ],
+  "intermediate": [
+    {
+      "id": 3,
+      "description": "3手詰め - 基本",
+      "board": {
+        "board": [
+          [null, null, null, {"type": "gold", "owner": "white"}, {"type": "king", "owner": "white"}, {"type": "gold", "owner": "white"}, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, {"type": "rook", "owner": "black"}, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null]
+        ],
+        "captured_pieces": {
+          "black": [{"type": "gold", "owner": "black"}],
+          "white": []
+        },
+        "turn": "black"
+      },
+      "solution": []
+    },
+    {
+      "id": 4,
+      "description": "3手詰め - 金打ち",
+      "board": {
+        "board": [
+          [null, null, null, {"type": "silver", "owner": "white"}, {"type": "king", "owner": "white"}, {"type": "silver", "owner": "white"}, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, {"type": "rook", "owner": "black"}, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null]
+        ],
+        "captured_pieces": {
+          "black": [{"type": "gold", "owner": "black"}, {"type": "gold", "owner": "black"}],
+          "white": []
+        },
+        "turn": "black"
+      },
+      "solution": []
+    }
+  ],
+  "advanced": [
+    {
+      "id": 5,
+      "description": "5手詰め",
+      "board": {
+        "board": [
+          [null, null, null, {"type": "gold", "owner": "white"}, {"type": "king", "owner": "white"}, null, null, null, null],
+          [null, null, null, null, {"type": "gold", "owner": "white"}, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, {"type": "rook", "owner": "black"}, null, null, null, null, null],
+          [null, null, null, null, {"type": "bishop", "owner": "black"}, null, null, null, null]
+        ],
+        "captured_pieces": {
+          "black": [{"type": "gold", "owner": "black"}],
+          "white": []
+        },
+        "turn": "black"
+      },
+      "solution": []
+    }
+  ],
+  "expert": [
+    {
+      "id": 6,
+      "description": "7手詰め",
+      "board": {
+        "board": [
+          [null, null, {"type": "gold", "owner": "white"}, {"type": "silver", "owner": "white"}, {"type": "king", "owner": "white"}, {"type": "silver", "owner": "white"}, null, null, null],
+          [null, null, null, null, {"type": "gold", "owner": "white"}, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, null, null, null, null, null, null],
+          [null, null, null, {"type": "rook", "owner": "black"}, null, null, null, null, null],
+          [null, null, {"type": "bishop", "owner": "black"}, null, {"type": "bishop", "owner": "black"}, null, null, null, null]
+        ],
+        "captured_pieces": {
+          "black": [{"type": "gold", "owner": "black"}, {"type": "silver", "owner": "black"}],
+          "white": []
+        },
+        "turn": "black"
+      },
+      "solution": []
+    }
+  ]
+}
