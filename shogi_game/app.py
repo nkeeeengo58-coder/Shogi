@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import messagebox
 import os
 import json
-from ui.screens import ModeSelectScreen, DifficultySelectScreen, ConfirmScreen, GameScreen
+from ui.screens import ModeSelectScreen, DifficultySelectScreen, ConfirmScreen, GameScreen, ResultScreen
 from ui.menu import MenuBar
 from ui.customize import CustomizeDialog
 from game.save_load import SaveLoad
@@ -93,6 +93,23 @@ class ShogiApp:
         """ゲームを開始"""
         self.clear_screen()
         self.current_screen = GameScreen(self.root, self, self.game_mode, self.difficulty)
+        self.current_screen.pack(fill=tk.BOTH, expand=True)
+
+    def show_result_screen(self, result_type, game_mode=None, difficulty=None):
+        """結果画面を表示"""
+        if game_mode is not None:
+            self.game_mode = game_mode
+        if difficulty is not None:
+            self.difficulty = difficulty
+
+        self.clear_screen()
+        self.current_screen = ResultScreen(
+            self.root,
+            self,
+            result_type,
+            self.game_mode,
+            self.difficulty
+        )
         self.current_screen.pack(fill=tk.BOTH, expand=True)
     
     def new_game(self):

@@ -3,6 +3,9 @@
 """
 import tkinter as tk
 from tkinter import messagebox
+import os
+import random
+from PIL import Image, ImageTk
 from ui.board_view import BoardView
 from game.board import Board
 from game.engine import Engine
@@ -169,6 +172,142 @@ class ConfirmScreen(tk.Frame):
         no_btn.pack(side=tk.LEFT, padx=20)
 
 
+class ResultScreen(tk.Frame):
+    """勝敗結果画面"""
+
+    _win_cycle_signature = None
+    _win_cycle_remaining = []
+
+    IMAGE_MAP = {
+        'win': 'win_pic.png',
+        'lose': 'lose_pic.png'
+    }
+
+    TITLE_MAP = {
+        'win': '勝利',
+        'lose': '敗北'
+    }
+
+    MESSAGE_MAP = {
+        'win': '対局が終了しました。次の操作を選択してください。',
+        'lose': '対局が終了しました。次の操作を選択してください。'
+    }
+
+    def __init__(self, parent, app, result_type, game_mode, difficulty):
+        super().__init__(parent)
+        self.app = app
+        self.result_type = result_type
+        self.game_mode = game_mode
+        self.difficulty = difficulty
+        self.result_image = None
+
+        self.config(bg='#f0f0f0')
+        self._build_ui()
+
+    def _build_ui(self):
+        container = tk.Frame(self, bg='#f0f0f0')
+        container.pack(fill=tk.BOTH, expand=True, padx=30, pady=30)
+
+        tk.Label(
+            container,
+            text=self.TITLE_MAP[self.result_type],
+            font=("", 28, "bold"),
+            bg='#f0f0f0'
+        ).pack(pady=(10, 20))
+
+        image_label = tk.Label(container, bg='#f0f0f0')
+        image_label.pack(pady=10)
+        self._load_result_image(image_label)
+
+        tk.Label(
+            container,
+            text=self.MESSAGE_MAP[self.result_type],
+            font=("", 14),
+            bg='#f0f0f0'
+        ).pack(pady=(15, 30))
+
+        button_frame = tk.Frame(container, bg='#f0f0f0')
+        button_frame.pack(pady=10)
+
+        tk.Button(
+            button_frame,
+            text='もう一度同じモードでゲームする',
+            font=("", 14),
+            width=22,
+            height=2,
+            command=self._restart_same_mode
+        ).pack(side=tk.LEFT, padx=10)
+
+        tk.Button(
+            button_frame,
+            text='他のモードでゲームする',
+            font=("", 14),
+            width=22,
+            height=2,
+            command=self.app.show_mode_select
+        ).pack(side=tk.LEFT, padx=10)
+
+    def _load_result_image(self, image_label):
+        import sys
+        if getattr(sys, 'frozen', False):
+            # PyInstallerでビルドされた実行ファイルの場合
+            base_dir = sys._MEIPASS
+        else:
+            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        image_name = self._select_result_image_name(base_dir)
+        image_path = os.path.join(base_dir, 'PNG', 'nextgame', image_name)
+
+        if not os.path.exists(image_path):
+            image_label.config(text=image_name, font=("", 16), fg='red')
+            return
+
+        try:
+            image = Image.open(image_path)
+            max_width = 480
+            max_height = 320
+            image.thumbnail((max_width, max_height), Image.Resampling.LANCZOS)
+            self.result_image = ImageTk.PhotoImage(image)
+            image_label.config(image=self.result_image, text='')
+        except Exception:
+            image_label.config(text=image_name, font=("", 16), fg='red')
+
+    def _select_result_image_name(self, base_dir):
+        """結果種別に応じた画像ファイル名を返す"""
+        if self.result_type != 'win':
+            return self.IMAGE_MAP[self.result_type]
+
+        image_dir = os.path.join(base_dir, 'PNG', 'nextgame')
+        if not os.path.isdir(image_dir):
+            return self.IMAGE_MAP['win']
+
+        candidates = []
+        for name in os.listdir(image_dir):
+            lower = name.lower()
+            if lower.startswith('win_pic') and lower.endswith('.png'):
+                candidates.append(name)
+
+        if not candidates:
+            return self.IMAGE_MAP['win']
+
+        candidates.sort()
+        signature = tuple(candidates)
+        if ResultScreen._win_cycle_signature != signature:
+            ResultScreen._win_cycle_signature = signature
+            ResultScreen._win_cycle_remaining = candidates.copy()
+            random.shuffle(ResultScreen._win_cycle_remaining)
+
+        if not ResultScreen._win_cycle_remaining:
+            ResultScreen._win_cycle_remaining = candidates.copy()
+            random.shuffle(ResultScreen._win_cycle_remaining)
+
+        return ResultScreen._win_cycle_remaining.pop()
+
+    def _restart_same_mode(self):
+        self.app.game_mode = self.game_mode
+        self.app.difficulty = self.difficulty
+        self.app.start_game()
+
+
 class GameScreen(tk.Frame):
     """ゲーム画面"""
     
@@ -303,8 +442,8 @@ class GameScreen(tk.Frame):
             # 詰みチェック
             opponent = 'white' if self.board.turn == 'black' else 'black'
             if Rules.is_checkmate(self.board, opponent):
-                winner = "先手" if self.board.turn == 'white' else "後手"
-                messagebox.showinfo("ゲーム終了", f"{winner}の勝ちです！")
+                result_type = 'win' if self.board.turn == 'white' else 'lose'
+                self.app.show_result_screen(result_type, self.game_mode, self.difficulty)
                 return
             
             # 千日手チェック
@@ -366,7 +505,7 @@ class GameScreen(tk.Frame):
                 
                 # 詰みチェック
                 if Rules.is_checkmate(self.board, 'black'):
-                    messagebox.showinfo("ゲーム終了", "後手（CPU）の勝ちです")
+                    self.app.show_result_screen('lose', self.game_mode, self.difficulty)
                     return
                 
                 # 王手チェック
@@ -378,7 +517,7 @@ class GameScreen(tk.Frame):
                 # プレイヤーの手番になったので入力を有効化
                 self.board_view.set_enabled(True)
             else:
-                messagebox.showinfo("ゲーム終了", "先手（あなた）の勝ちです")
+                self.app.show_result_screen('win', self.game_mode, self.difficulty)
                 self.board_view.set_enabled(True)
         except Exception as e:
             messagebox.showerror("エラー", f"CPU処理中にエラーが発生しました:\n{str(e)}")
@@ -390,8 +529,7 @@ class GameScreen(tk.Frame):
         """投了"""
         result = messagebox.askyesno("投了", "投了しますか？")
         if result:
-            messagebox.showinfo("ゲーム終了", "あなたの負けです")
-            self.app.show_mode_select()
+            self.app.show_result_screen('lose', self.game_mode, self.difficulty)
     
     def show_solution(self):
         """正解を表示"""
@@ -411,8 +549,7 @@ class GameScreen(tk.Frame):
                 self.board_view.refresh()
                 self.turn_label.config(text=self._get_turn_text())
             else:
-                messagebox.showinfo("完了", "全ての問題をクリアしました！")
-                self.app.show_mode_select()
+                self.app.show_result_screen('win', self.game_mode, self.difficulty)
     
     def back_to_menu(self):
         """メニューに戻る"""

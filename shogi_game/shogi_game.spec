@@ -8,13 +8,17 @@
 
 block_cipher = None
 
+import os
+_here = SPECPATH  # spec ファイルが置かれているディレクトリの絶対パス
+
 a = Analysis(
-    ['main.py'],
-    pathex=[],
+    [os.path.join(_here, 'main.py')],
+    pathex=[_here],
     binaries=[],
     datas=[
-        ('assets', 'assets'),           # 画像ファイルを含める
-        ('data', 'data'),                # 詰将棋問題を含める
+        (os.path.join(_here, 'assets'), 'assets'),  # 画像ファイルを含める
+        (os.path.join(_here, 'data'),   'data'),    # 詰将棋問題を含める
+        (os.path.join(_here, 'PNG'),    'PNG'),     # 勝敗画像を含める
     ],
     hiddenimports=[
         'PIL._tkinter_finder',          # Pillowのtkinter連携
@@ -54,7 +58,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='assets/icons/shogi_icon.ico'  # アイコンを設定
+    icon=os.path.join(_here, 'assets', 'icons', 'shogi_icon.ico')  # アイコンを設定
 )
 
 # ディレクトリ版を作成する場合は以下をコメント解除
