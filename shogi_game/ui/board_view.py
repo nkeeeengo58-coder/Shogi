@@ -517,11 +517,12 @@ class BoardView(tk.Frame):
                 piece_counts[base_type] = 0
             piece_counts[base_type] += 1
         
-        # クリック位置から駒を特定
+        # クリック位置から駒を特定（描画位置は x_base + 20）
+        piece_x = x_base + 20
         y_offset = 0
         for piece_type in piece_counts.keys():
             piece_y = y_base + y_offset
-            if x_base - 25 <= x <= x_base + 25 and piece_y - 25 <= y <= piece_y + 25:
+            if piece_x - 25 <= x <= piece_x + 25 and piece_y - 25 <= y <= piece_y + 25:
                 self.selected_piece_type = piece_type
                 self.selected_pos = None
                 self.legal_moves = Rules.get_drop_moves(self.board, piece_type)

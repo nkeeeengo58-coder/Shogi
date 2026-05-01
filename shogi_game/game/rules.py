@@ -1,7 +1,7 @@
 """
 将棋のルール判定
 """
-from game.piece import PieceType
+from game.piece import PieceType, Piece
 from game.move import Move
 
 class Rules:
@@ -254,7 +254,6 @@ class Rules:
         """打ち歩詰めかどうか"""
         # 簡易実装：歩を打って王手になり、かつ詰みの場合
         test_board = board.copy()
-        from game.piece import Piece
         pawn = Piece(PieceType.PAWN, test_board.turn)
         move = Move(None, (row, col), pawn, True, False)
         test_board.move_piece(move)

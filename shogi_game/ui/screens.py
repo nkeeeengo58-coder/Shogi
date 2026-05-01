@@ -358,26 +358,32 @@ class GameScreen(tk.Frame):
         if self.engine is None:
             return
         
-        move = self.engine.get_best_move(self.board)
-        if move:
-            self.board.move_piece(move)
-            self.board_view.refresh()
-            
-            # 詰みチェック
-            if Rules.is_checkmate(self.board, 'black'):
-                messagebox.showinfo("ゲーム終了", "後手（CPU）の勝ちです")
-                return
-            
-            # 王手チェック
-            if Rules.is_in_check(self.board, 'black'):
-                self.turn_label.config(text=f"{self._get_turn_text()} - 王手！", fg='red')
+        try:
+            move = self.engine.get_best_move(self.board)
+            if move:
+                self.board.move_piece(move)
+                self.board_view.refresh()
+                
+                # 詰みチェック
+                if Rules.is_checkmate(self.board, 'black'):
+                    messagebox.showinfo("ゲーム終了", "後手（CPU）の勝ちです")
+                    return
+                
+                # 王手チェック
+                if Rules.is_in_check(self.board, 'black'):
+                    self.turn_label.config(text=f"{self._get_turn_text()} - 王手！", fg='red')
+                else:
+                    self.turn_label.config(text=self._get_turn_text(), fg='black')
+                
+                # プレイヤーの手番になったので入力を有効化
+                self.board_view.set_enabled(True)
             else:
-                self.turn_label.config(text=self._get_turn_text(), fg='black')
-            
-            # プレイヤーの手番になったので入力を有効化
-            self.board_view.set_enabled(True)
-        else:
-            messagebox.showinfo("ゲーム終了", "先手（あなた）の勝ちです")
+                messagebox.showinfo("ゲーム終了", "先手（あなた）の勝ちです")
+                self.board_view.set_enabled(True)
+        except Exception as e:
+            messagebox.showerror("エラー", f"CPU処理中にエラーが発生しました:\n{str(e)}")
+            import traceback
+            traceback.print_exc()
             self.board_view.set_enabled(True)
     
     def resign(self):
