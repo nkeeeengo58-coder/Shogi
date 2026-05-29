@@ -1,4 +1,5 @@
 """PySide6ベースの画面クラス"""
+from functools import partial
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QFrame,
@@ -41,10 +42,10 @@ class DifficultySelectScreen(QWidget):
             ('beginner', '初級'),
             ('intermediate', '中級'),
             ('advanced', '上級'),
-            ('expert', 'エキスパート'),
+            ('expert', '超上級'),
         ]:
             btn = QPushButton(text)
-            btn.clicked.connect(lambda _checked=False, d=difficulty: self.app.show_confirm(mode, d))
+            btn.clicked.connect(partial(self.app.show_confirm, mode, difficulty))
             layout.addWidget(btn)
 
         back_btn = QPushButton("戻る")
@@ -61,7 +62,7 @@ class ConfirmScreen(QWidget):
             'beginner': '初級',
             'intermediate': '中級',
             'advanced': '上級',
-            'expert': 'エキスパート',
+            'expert': '超上級',
         }
         layout = QVBoxLayout(self)
         layout.addWidget(QLabel(f"モード: {mode_text}"))

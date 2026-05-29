@@ -31,7 +31,7 @@ class SaveLoad:
         return filepath
 
     @staticmethod
-    def _ensure_app():
+    def _ensure_qt_application():
         from PySide6.QtWidgets import QApplication
         return QApplication.instance() or QApplication([])
 
@@ -43,7 +43,7 @@ class SaveLoad:
             if selector is not None:
                 filepath = selector(save_dir)
             else:
-                SaveLoad._ensure_app()
+                SaveLoad._ensure_qt_application()
                 from PySide6.QtWidgets import QFileDialog
                 filepath, _ = QFileDialog.getOpenFileName(
                     parent,
