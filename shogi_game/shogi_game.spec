@@ -20,9 +20,7 @@ a = Analysis(
         (os.path.join(_here, 'data'),   'data'),    # 詰将棋問題を含める
         (os.path.join(_here, 'PNG'),    'PNG'),     # 勝敗画像を含める
     ],
-    hiddenimports=[
-        'PIL._tkinter_finder',          # Pillowのtkinter連携
-    ],
+    hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
