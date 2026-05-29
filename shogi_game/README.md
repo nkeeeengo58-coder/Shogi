@@ -10,8 +10,8 @@
 
 ## 動作環境
 
-- Python 3.6以上
-- Tkinter（Python標準ライブラリ）
+- Python 3.9以上
+- PySide6
 
 ## インストール
 
@@ -19,6 +19,9 @@
 # リポジトリをクローン
 git clone <repository-url>
 cd Shogi/shogi_game
+
+# 依存関係をインストール
+pip install -r requirements.txt
 
 # 実行
 python main.py
@@ -313,14 +316,10 @@ move = engine.get_best_move(board)
 
 ## トラブルシューティング
 
-### Tkinterが見つからない
+### PySide6が見つからない
 
 ```bash
-# Ubuntu/Debian
-sudo apt-get install python3-tk
-
-# macOS (Homebrewの場合)
-brew install python-tk
+pip install -r requirements.txt
 ```
 
 ### 保存データが読み込めない
