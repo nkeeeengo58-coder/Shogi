@@ -26,8 +26,8 @@ class Board:
         self.board[0][7] = Piece(PieceType.KNIGHT, 'white')
         self.board[0][0] = Piece(PieceType.LANCE, 'white')
         self.board[0][8] = Piece(PieceType.LANCE, 'white')
-        self.board[1][1] = Piece(PieceType.BISHOP, 'white')
-        self.board[1][7] = Piece(PieceType.ROOK, 'white')
+        self.board[1][1] = Piece(PieceType.ROOK, 'white')
+        self.board[1][7] = Piece(PieceType.BISHOP, 'white')
         for col in range(9):
             self.board[2][col] = Piece(PieceType.PAWN, 'white')
         
@@ -41,8 +41,8 @@ class Board:
         self.board[8][7] = Piece(PieceType.KNIGHT, 'black')
         self.board[8][0] = Piece(PieceType.LANCE, 'black')
         self.board[8][8] = Piece(PieceType.LANCE, 'black')
-        self.board[7][7] = Piece(PieceType.BISHOP, 'black')
-        self.board[7][1] = Piece(PieceType.ROOK, 'black')
+        self.board[7][7] = Piece(PieceType.ROOK, 'black')
+        self.board[7][1] = Piece(PieceType.BISHOP, 'black')
         for col in range(9):
             self.board[6][col] = Piece(PieceType.PAWN, 'black')
     
