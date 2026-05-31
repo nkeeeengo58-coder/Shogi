@@ -22,6 +22,17 @@ if ! python3 -c "import PyInstaller" 2>/dev/null; then
     fi
 fi
 
+if ! python3 -c "import PySide6" 2>/dev/null; then
+    echo "PySide6 がインストールされていません。"
+    read -p "インストールしますか？ [Y/n] " install_pyside
+    if [[ $install_pyside == "Y" || $install_pyside == "y" ]]; then
+        pip3 install PySide6
+    else
+        echo "ビルドを中止しました。"
+        exit 1
+    fi
+fi
+
 if ! python3 -c "import PIL" 2>/dev/null; then
     echo "Pillow がインストールされていません。"
     read -p "インストールしますか？ [Y/n] " install_pillow

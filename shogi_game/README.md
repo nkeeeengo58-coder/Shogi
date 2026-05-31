@@ -10,8 +10,9 @@
 
 ## 動作環境
 
-- Python 3.9以上
+- Python 3.8以上
 - PySide6
+- Pillow
 
 ## インストール
 
@@ -194,11 +195,13 @@ build.bat
 
 **Linux/Mac:**
 ```bash
-chmod +x build.sh
-./build.sh
+bash build.sh
 ```
 
-これらのスクリプトを実行すると、**Pythonがインストールされていない環境でも動作する実行ファイル**（約15-20MB）が `dist/将棋ゲーム.exe` として生成されます。
+これらのスクリプトを実行すると、Pythonがインストールされていない環境でも動作する実行ファイルが生成されます。
+
+- Windows: dist/将棋ゲーム.exe
+- Linux/Mac: dist/将棋ゲーム
 
 #### CLI実行例:
 
@@ -213,17 +216,17 @@ pip install -r requirements.txt
 pip install pyinstaller
 
 # ビルドスクリプトを実行
-./build.sh    # Linux/Mac
+bash build.sh    # Linux/Mac
 # または
 build.bat     # Windows
 
 # 実行ファイルの生成を確認
-ls -lh dist/将棋ゲーム.exe  # Linux/Mac
+ls -lh dist/将棋ゲーム      # Linux/Mac
 dir dist\将棋ゲーム.exe     # Windows
 
 # 動作確認
 cd dist
-./将棋ゲーム.exe
+./将棋ゲーム
 ```
 
 ### 📚 詳細な配布手順
@@ -311,15 +314,15 @@ move = engine.get_best_move(board)
 
 - `game/engine.py`: CPU思考の改善
 - `data/tsume_problems.json`: 詰将棋問題の追加
-- `ui/board_view.py`: 盤面表示のカスタマイズ
+- `ui/qt/board_widget.py`: 盤面表示のカスタマイズ
 - `assets/`: 画像・音声の追加
 
 ## トラブルシューティング
 
-### PySide6が見つからない
+### LinuxコンテナでPySide6の読み込みに失敗する
 
 ```bash
-pip install -r requirements.txt
+sudo apt-get install -y libgl1 libegl1 libxkbcommon0 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-image0 libxcb-render-util0 libxcb-xinerama0
 ```
 
 ### 保存データが読み込めない

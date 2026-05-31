@@ -1,13 +1,11 @@
 """
 将棋ゲーム - メインエントリーポイント
 """
-from app import ShogiApp
-
+from qt_app import main as run_qt_app
 
 def main():
-    app = ShogiApp()
-    app.run()
-
+    """アプリケーションを起動"""
+    return run_qt_app()
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

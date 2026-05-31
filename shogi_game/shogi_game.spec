@@ -20,7 +20,11 @@ a = Analysis(
         (os.path.join(_here, 'data'),   'data'),    # 詰将棋問題を含める
         (os.path.join(_here, 'PNG'),    'PNG'),     # 勝敗画像を含める
     ],
-    hiddenimports=[],
+    hiddenimports=[
+        'PySide6.QtCore',
+        'PySide6.QtGui',
+        'PySide6.QtWidgets',
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

@@ -40,8 +40,10 @@ pip install -r requirements.txt
 pip install pyinstaller
 
 # ビルドスクリプトを実行
-./build.sh    # Linux/Mac
-build.bat     # Windows
+bash build.sh    # Linux/Mac
+
+# Windows は cmd または PowerShell で実行
+build.bat
 
 # dist/将棋ゲーム.exe が生成されます
 ```
@@ -53,7 +55,7 @@ build.bat     # Windows
 ## 技術仕様
 
 - **言語**: Python 3.12+
-- **GUI**: Tkinter
+- **GUI**: Qt (PySide6)
 - **画像処理**: Pillow (PIL)
 - **データ形式**: JSON
 

@@ -3,53 +3,36 @@
 """
 import os
 from PIL import Image, ImageDraw
-
-
-BOARD_PADDING = 40
-BOARD_IMAGE_WIDTH = 1306
-BOARD_IMAGE_HEIGHT = 1204
-BOARD_RENDER_WIDTH = 540
-BOARD_GRID_LEFT = 133
-BOARD_GRID_TOP = 58
-BOARD_GRID_RIGHT = 1141
-BOARD_GRID_BOTTOM = 1142
+from ui.board_layout import BOARD_PADDING, get_cell_rect as calculate_cell_rect, get_layout_metrics as calculate_layout_metrics
 
 
 def get_layout_metrics():
     """盤面画像から実際のマス配置情報を計算"""
-    board_width = BOARD_RENDER_WIDTH
-    board_height = round(BOARD_IMAGE_HEIGHT * board_width / BOARD_IMAGE_WIDTH)
-    scale_x = board_width / BOARD_IMAGE_WIDTH
-    scale_y = board_height / BOARD_IMAGE_HEIGHT
-
-    grid_left = BOARD_PADDING + BOARD_GRID_LEFT * scale_x
-    grid_top = BOARD_PADDING + BOARD_GRID_TOP * scale_y
-    grid_right = BOARD_PADDING + BOARD_GRID_RIGHT * scale_x
-    grid_bottom = BOARD_PADDING + BOARD_GRID_BOTTOM * scale_y
-    cell_width = (grid_right - grid_left) / 9
-    cell_height = (grid_bottom - grid_top) / 9
-    piece_size = max(24, int(min(cell_width, cell_height)) - 6)
-
+    metrics = calculate_layout_metrics()
     return {
-        'board_width': board_width,
-        'board_height': board_height,
-        'grid_left': grid_left,
-        'grid_top': grid_top,
-        'grid_right': grid_right,
-        'grid_bottom': grid_bottom,
-        'cell_width': cell_width,
-        'cell_height': cell_height,
-        'piece_size': piece_size,
+        'board_width': metrics.board_width,
+        'board_height': metrics.board_height,
+        'grid_left': metrics.grid_left,
+        'grid_top': metrics.grid_top,
+        'grid_right': metrics.grid_right,
+        'grid_bottom': metrics.grid_bottom,
+        'cell_width': metrics.cell_width,
+        'cell_height': metrics.cell_height,
+        'piece_size': metrics.piece_size,
     }
 
 
 def get_cell_rect(metrics, row, col):
     """マスの矩形を返す"""
-    x1 = metrics['grid_left'] + col * metrics['cell_width']
-    y1 = metrics['grid_top'] + row * metrics['cell_height']
-    x2 = x1 + metrics['cell_width']
-    y2 = y1 + metrics['cell_height']
-    return x1, y1, x2, y2
+    return calculate_cell_rect(SimpleMetrics(metrics), row, col)
+
+
+class SimpleMetrics:
+    def __init__(self, values):
+        self.grid_left = values['grid_left']
+        self.grid_top = values['grid_top']
+        self.cell_width = values['cell_width']
+        self.cell_height = values['cell_height']
 
 def create_test_layout():
     """盤面のレイアウトをテスト画像として生成"""

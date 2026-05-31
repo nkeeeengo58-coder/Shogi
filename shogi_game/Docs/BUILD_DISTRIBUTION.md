@@ -20,7 +20,7 @@
 - Python 3.8以上
 - 必要なパッケージ：
   ```bash
-  pip install pyinstaller pillow
+    pip install pyinstaller pillow pyside6
   ```
 
 ### Inno Setup（インストーラー作成用）
@@ -61,10 +61,14 @@ pip install pyinstaller
 
 #### 方法A: ビルドスクリプトを使用（推奨）
 
-```bash
-# Windowsの場合
+```cmd
+REM Windows の場合（cmd または PowerShell）
 build.bat
+```
 
+> 注: `build.bat` はWindows用です。Linux/macOSのシェルで実行すると `command not found` になります。
+
+```bash
 # macOS/Linuxの場合
 bash build.sh
 ```
@@ -73,19 +77,14 @@ bash build.sh
 
 ```bash
 cd shogi_game
-pyinstaller shogi_game.spec
+python -m PyInstaller shogi_game.spec
 ```
 
 既存の `shogi_game.spec` には以下が設定済みです：
 - アプリケーションアイコン（`assets/icons/shogi_icon.ico`）
 - 画像ファイルの自動同梱
 - 詰将棋問題データの同梱
-- 不要なモジュールの除外
-
-既存の `shogi_game.spec` には以下が設定済みです：
-- アプリケーションアイコン（`assets/icons/shogi_icon.ico`）
-- 画像ファイルの自動同梱
-- 詰将棋問題データの同梱
+- PySide6のQtモジュール同梱
 - 不要なモジュールの除外
 
 #### specファイルの主な設定内容:
@@ -103,7 +102,9 @@ a = Analysis(
         ('data', 'data'),                # 詰将棋問題を含める
     ],
     hiddenimports=[
-        'PIL._tkinter_finder',          # Pillowのtkinter連携
+        'PySide6.QtCore',
+        'PySide6.QtGui',
+        'PySide6.QtWidgets',
     ],
     hookspath=[],
     hooksconfig={},
@@ -148,9 +149,9 @@ exe = EXE(
 
 ビルドが成功すると、`dist/将棋ゲーム.exe` が生成されます。
 
-```bash
+```cmd
 cd dist
-./将棋ゲーム.exe
+.\将棋ゲーム.exe
 ```
 
 ### 確認事項
@@ -167,8 +168,20 @@ cd dist
 
 ```bash
 # 必要なモジュールを明示的に指定
-pyinstaller --hidden-import=PIL --hidden-import=tkinter 将棋ゲーム.spec
+pyinstaller --hidden-import=PySide6.QtCore --hidden-import=PySide6.QtWidgets shogi_game.spec
 ```
+
+#### エラー: Linuxコンテナで PyInstaller が失敗する
+
+```bash
+ERROR: Python was built without a shared library, which is required by PyInstaller
+```
+
+このエラーは、利用中の Python 実行環境が `--enable-shared` なしでビルドされている場合に発生します。
+アプリ側の問題ではないため、次のいずれかで対応してください。
+
+- 共有ライブラリ付き Python を使う環境（ローカルPCやCI）でビルドする
+- `python:3.x` などの公式イメージで `python -m PyInstaller shogi_game.spec` を実行する
 
 #### 起動が遅い
 
@@ -237,7 +250,7 @@ ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
 
 ; アイコン（オプション）
-; SetupIconFile=assets\icon.ico
+; SetupIconFile=assets\icons\shogi_icon.ico
 
 [Languages]
 Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
@@ -385,6 +398,14 @@ onefile版が起動が遅い場合はディレクトリ版を使用：
 - ディレクトリ版を使用するか
 - インストーラー版を使用してください
 
+### Q: LinuxコンテナでPySide6の読み込みに失敗する
+
+**A:** OpenGL/XCBの共有ライブラリが不足している可能性があります。以下をインストールしてください：
+
+```bash
+sudo apt-get install -y libgl1 libegl1 libxkbcommon0 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-image0 libxcb-render-util0 libxcb-xinerama0
+```
+
 ### Q: セーブデータの保存場所は？
 
 **A:** `C:\Users\[ユーザー名]\.shogi_game\saves\` に保存されます
@@ -393,8 +414,8 @@ onefile版が起動が遅い場合はディレクトリ版を使用：
 
 **A:** 
 1. ICO形式のアイコンファイルを準備
-2. `assets/icon.ico` として保存
-3. `.spec` ファイルで `icon='assets/icon.ico'` を指定
+2. `assets/icons/shogi_icon.ico` として保存
+3. `.spec` ファイルで `icon='assets/icons/shogi_icon.ico'` を指定
 4. 再ビルド
 
 ---

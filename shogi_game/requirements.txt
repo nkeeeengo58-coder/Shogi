@@ -1,5 +1,6 @@
 # 画像処理用ライブラリ
 Pillow>=10.0.0
+pytest>=8.0.0
+pytest-qt>=4.4.0
+PySide6>=6.7.0
 
-# GUIライブラリ
-PySide6>=6.8.0
